@@ -66,7 +66,6 @@ RUN chgrp -R 0 /var/log/
 RUN chmod -R g=u /var/log/
 EXPOSE 1222/tcp 1880/tcp 1443/tcp
 
-VOLUME ["${GITLAB_DATA_DIR}", "${GITLAB_LOG_DIR}"]
 WORKDIR ${GITLAB_INSTALL_DIR}
 ENTRYPOINT ["/sbin/entrypoint.sh"]
 CMD ["app:start"]
