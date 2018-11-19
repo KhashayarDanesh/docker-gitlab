@@ -66,9 +66,6 @@ RUN chgrp -R 0 /var/log/
 RUN chmod -R g=u /var/log/
 RUN apt-get update && apt-get install -y libnss-wrapper 
 EXPOSE 1222/tcp 1880/tcp 1443/tcp
-ENV LD_PRELOAD=libuid_wrapper.so
-ENV UID_WRAPPER=1
-ENV UID_WRAPPER_ROOT=1
 WORKDIR ${GITLAB_INSTALL_DIR}
 ENTRYPOINT ["/sbin/entrypoint.sh"]
 CMD ["app:start"]
