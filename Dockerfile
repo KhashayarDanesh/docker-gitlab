@@ -62,6 +62,8 @@ RUN chgrp -R 0 /sbin/entrypoint.sh
 RUN chmod -R g=u /sbin/entrypoint.sh
 RUN chgrp -R 0 ${GITLAB_RUNTIME_DIR}/
 RUN chmod -R g=u  ${GITLAB_RUNTIME_DIR}/
+RUN chgrp -R 0 /var/log/gitlab/
+RUN chmod -R g=u /var/log/gitlab/
 EXPOSE 1222/tcp 1880/tcp 1443/tcp
 
 VOLUME ["${GITLAB_DATA_DIR}", "${GITLAB_LOG_DIR}"]
