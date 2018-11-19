@@ -1,21 +1,8 @@
 FROM ubuntu:xenial-20181005
 
-ARG BUILD_DATE
-ARG VCS_REF
-ARG VERSION=11.4.5
+LABEL maintainer="sameer@damagehead.com"
 
-LABEL \
-    maintainer="sameer@damagehead.com" \
-    org.label-schema.schema-version="1.0" \
-    org.label-schema.build-date=${BUILD_DATE} \
-    org.label-schema.name=gitlab \
-    org.label-schema.vendor=damagehead \
-    org.label-schema.url="https://github.com/sameersbn/docker-gitlab" \
-    org.label-schema.vcs-url="https://github.com/sameersbn/docker-gitlab.git" \
-    org.label-schema.vcs-ref=${VCS_REF} \
-    com.damagehead.gitlab.license=MIT
-
-ENV GITLAB_VERSION=${VERSION} \
+ENV GITLAB_VERSION=11.4.5 \
     RUBY_VERSION=2.4 \
     GOLANG_VERSION=1.10.4 \
     GITLAB_SHELL_VERSION=8.3.3 \
@@ -71,10 +58,15 @@ RUN bash ${GITLAB_BUILD_DIR}/install.sh
 COPY assets/runtime/ ${GITLAB_RUNTIME_DIR}/
 COPY entrypoint.sh /sbin/entrypoint.sh
 RUN chmod 755 /sbin/entrypoint.sh
-
-EXPOSE 22/tcp 80/tcp 443/tcp
+RUN chgrp -R 0 /sbin/entrypoint.sh
+RUN chmod -R g=u /sbin/entrypoint.sh
+RUN chgrp -R 0 ${GITLAB_RUNTIME_DIR}/
+RUN chmod -R g=u  ${GITLAB_RUNTIME_DIR}/
+EXPOSE 1222/tcp 1880/tcp 1443/tcp
 
 VOLUME ["${GITLAB_DATA_DIR}", "${GITLAB_LOG_DIR}"]
 WORKDIR ${GITLAB_INSTALL_DIR}
 ENTRYPOINT ["/sbin/entrypoint.sh"]
 CMD ["app:start"]
+
+USER 1010
